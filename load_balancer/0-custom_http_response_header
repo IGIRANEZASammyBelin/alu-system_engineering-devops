@@ -13,13 +13,12 @@ echo "Ceci n'est pas une page" > /var/www/html/404.html
 cat > /etc/nginx/sites-available/default <<'EOF'
 server {
     listen 80 default_server;
-    listen [::]:80 default_server;
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
     server_name _;
 
-    add_header X-Served-By $hostname;
+    add_header X-Served-By $hostname always;
 
     location /redirect_me {
         return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
@@ -36,4 +35,5 @@ server {
 }
 EOF
 
-service nginx restart
+ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+service nginx restart || service nginx start
