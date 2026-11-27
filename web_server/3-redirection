@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Installs Nginx and redirects /redirect_me to another page with a 301
+
+apt-get -y update
+apt-get -y install nginx
+
+mkdir -p /var/www/html
+echo "Holberton School for the win!" > /var/www/html/index.html
+
+cat > /etc/nginx/sites-available/default <<'EOF'
+server {
+    listen 80 default_server;
+    root /var/www/html;
+    index index.html;
+    server_name _;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF
+
+service nginx restart || service nginx start
